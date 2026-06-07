@@ -1,47 +1,40 @@
-// Experiment 6: Implementation of Circular Queue
+// Experiment 5: Implementation of Linear Queue
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 5
+#define MAX 100
 
 int queue[MAX];
 int front = -1, rear = -1;
 
-int isFull()  { return (rear + 1) % MAX == front; }
-int isEmpty() { return front == -1; }
+int isFull()  { return rear == MAX - 1; }
+int isEmpty() { return front == -1 || front > rear; }
 
 void enqueue(int val) {
-    if (isFull()) { printf("Circular Queue is Full!\n"); return; }
+    if (isFull()) { printf("Queue is Full!\n"); return; }
     if (front == -1) front = 0;
-    rear = (rear + 1) % MAX;
-    queue[rear] = val;
-    printf("%d enqueued\n", val);
+    queue[++rear] = val;
+    printf("%d enqueued to queue\n", val);
 }
 
 int dequeue() {
-    if (isEmpty()) { printf("Circular Queue is Empty!\n"); return -1; }
-    int val = queue[front];
-    if (front == rear) front = rear = -1;
-    else front = (front + 1) % MAX;
+    if (isEmpty()) { printf("Queue is Empty!\n"); return -1; }
+    int val = queue[front++];
+    if (front > rear) front = rear = -1;
     return val;
 }
 
 void display() {
     if (isEmpty()) { printf("Queue is Empty!\n"); return; }
-    printf("Circular Queue: ");
-    int i = front;
-    while (1) {
-        printf("%d ", queue[i]);
-        if (i == rear) break;
-        i = (i + 1) % MAX;
-    }
+    printf("Queue (front to rear): ");
+    for (int i = front; i <= rear; i++) printf("%d ", queue[i]);
     printf("\n");
 }
 
 int main() {
     int choice, val;
-    printf("=== Circular Queue Implementation (Size=%d) ===\n", MAX);
+    printf("=== Linear Queue Implementation ===\n");
     do {
         printf("\n1. Enqueue\n2. Dequeue\n3. Display\n4. Exit\nChoice: ");
         scanf("%d", &choice);
